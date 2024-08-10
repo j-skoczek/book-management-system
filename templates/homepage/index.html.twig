@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Book management system
+{% endblock %}
+
+{% block body %}
+
+	<div>
+		<a href="{{ path('app_book_list') }}">Browse the list of books</a>
+	</div>
+	<div>
+		<a href="{{ path('app_book_upload') }}">Add a book here</a>
+	</div>
+
+{% endblock %}

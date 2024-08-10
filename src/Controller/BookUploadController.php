@@ -43,6 +43,6 @@ class BookUploadController extends AbstractController
 
             return $this->redirectToRoute('app_home_page');
         }
-        return $this->render('book/upload.html.twig', ['upload_form' => $form]);
+        return $this->render('book_upload/index.html.twig', ['upload_form' => $form]);
     }
 }

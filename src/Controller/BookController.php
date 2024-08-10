@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Controller;
+
+use App\Entity\Book;
+use App\Repository\BookRepository;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+class BookController extends AbstractController
+{
+    #[Route('/book/details/{isbn}', name: 'app_book')]
+    public function index(string $isbn, BookRepository $bookRepository): Response
+    {
+        $book = $bookRepository->findOneBy(['isbn' => $isbn]);
+        return $this->render('book/index.html.twig', ['book' => $book]);
+    }
+}

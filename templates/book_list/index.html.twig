@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello BookListController!
+{% endblock %}
+
+{% block body %}
+
+	<div>
+		todo:
+								slugs
+								pagination
+								sorting ?
+								search form - maybe there is an existing bundle
+	</div>
+
+
+	{{form(search_form)}}
+
+		{% for book in paginator %}
+			<div>
+				<a href="{{ path('app_book', { isbn: book.isbn }) }}">
+					{{ book.title }}
+				</a>
+			</div>
+		{% endfor %}
+
+
+	{# display navigation #}
+	<div class="navigation">
+		{{ knp_pagination_render(paginator) }}
+	</div>
+
+	{% endblock %}
