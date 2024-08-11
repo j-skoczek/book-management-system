@@ -9,8 +9,11 @@
 	<div>
 		<a href="{{ path('app_book_list') }}">Browse the list of books</a>
 	</div>
-	<div>
-		<a href="{{ path('app_book_upload') }}">Add a book here</a>
-	</div>
+	{% if app.user %}
+		<div>
+			<a href="{{ path('app_book_upload') }}">Add a book here</a>
+		</div>
+	{% endif %}
+
 
 {% endblock %}

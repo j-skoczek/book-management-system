@@ -5,29 +5,21 @@
 
 {% block body %}
 
-	<div>
-		todo:
-								slugs
-								pagination
-								sorting ?
-								search form - maybe there is an existing bundle
-	</div>
-
-
 	{{form(search_form)}}
 
-		{% for book in paginator %}
-			<div>
-				<a href="{{ path('app_book', { isbn: book.isbn }) }}">
-					{{ book.title }}
-				</a>
-			</div>
-		{% endfor %}
-
+	{% for book in paginator %}
+		<div>
+			<a href="{{ path('app_book', { isbn: book.isbn }) }}">
+				{% block book %}
+					{{ book.title }} by {{ book.author }}
+				{% endblock %}
+			</a>
+		</div>
+	{% endfor %}
 
 	{# display navigation #}
 	<div class="navigation">
 		{{ knp_pagination_render(paginator) }}
 	</div>
 
-	{% endblock %}
+{% endblock %}

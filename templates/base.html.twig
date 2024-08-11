@@ -19,13 +19,24 @@
 			<h4>
 				<a href="{{ path('app_home_page') }}">Home</a>
 			</h4>
-            <h4>
-				<a href="{{ path('app_book_list') }}">List of books</a>
+			<h4>
+				<a href="{{ path('app_book_list') }}">All books</a>
 			</h4>
-            <h4>
-			<div>todo check if logged in to show this or logout</div>
-				<a href="{{ path('app_registration') }}">Register</a>
-			</h4>
+			{% if app.user %}
+				<h4>
+					<a href="{{ path('app_user_book_list') }}">List of your books</a>
+				</h4>
+				<h4>
+					<a href="{{ path('app_logout') }}">Log out</a>
+				</h4>
+			{% else %}
+				<h4>
+					<a href="{{ path('app_login') }}">Log in</a>
+				</h4>
+				<h4>
+					<a href="{{ path('app_registration') }}">Register</a>
+				</h4>
+			{% endif %}
 			{% block body %}{% endblock %}
 		</body>
 	</body>
