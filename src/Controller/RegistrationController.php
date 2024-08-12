@@ -31,7 +31,7 @@ class RegistrationController extends AbstractController
             );
             $user->setPassword($hashedPassword);
 
-            //todo handle roles ? add some ? check update/delete? no idea 
+            //is there a reason to have more roles ? for now let's assume admin has direct db access and can handle things there
             $user->setRoles(['roles'=> 'ROLE_USER']);
 
             // todo handle duplicate emails
@@ -39,7 +39,7 @@ class RegistrationController extends AbstractController
             $this->entityManager->persist($user);
             $this->entityManager->flush();
 
-            //todo pass some msg like registration successfull? or mobe to login stead of homepage ?
+            //todo pass some msg like registration successfull?
             return $this->redirectToRoute('app_home_page');
         }
 

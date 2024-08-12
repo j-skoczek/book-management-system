@@ -19,8 +19,6 @@ class BookUploadController extends AbstractController
         private Security $security
     ) {}
 
-    //todo change ctrl name. will handle all crud prolly
-
 
     #[Route('/book/upload', name: 'app_book_upload')]
     public function index(Request $request, UserRepository $userRepository): Response
@@ -30,7 +28,7 @@ class BookUploadController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $this->security->getUser();
-            $book->setAddedByUser($userRepository->findByEmail($user->getUserIdentifier()));
+            $book->setOwner($userRepository->findByEmail($user->getUserIdentifier()));
             $this->entityManager->persist($book);
             $this->entityManager->flush();
             return $this->redirectToRoute('app_home_page');

@@ -37,12 +37,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Book>
      */
-    #[ORM\OneToMany(targetEntity: Book::class, mappedBy: 'addedByUser')]
-    private Collection $books;
+    #[ORM\OneToMany(targetEntity: Book::class, mappedBy: 'owner')]
+    private Collection $ownedBooks;
 
     public function __construct()
     {
-        $this->books = new ArrayCollection();
+        $this->ownedBooks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -123,27 +123,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Book>
      */
-    public function getBooks(): Collection
+    public function getOwnedBooks(): Collection
     {
-        return $this->books;
+        return $this->ownedBooks;
     }
 
-    public function addBook(Book $book): static
+    public function addOwnedBook(Book $ownedBook): static
     {
-        if (!$this->books->contains($book)) {
-            $this->books->add($book);
-            $book->setAddedByUser($this);
+        if (!$this->ownedBooks->contains($ownedBook)) {
+            $this->ownedBooks->add($ownedBook);
+            $ownedBook->setOwner($this);
         }
 
         return $this;
     }
 
-    public function removeBook(Book $book): static
+    public function removeOwnedBook(Book $ownedBook): static
     {
-        if ($this->books->removeElement($book)) {
+        if ($this->ownedBooks->removeElement($ownedBook)) {
             // set the owning side to null (unless already changed)
-            if ($book->getAddedByUser() === $this) {
-                $book->setAddedByUser(null);
+            if ($ownedBook->getOwner() === $this) {
+                $ownedBook->setOwner(null);
             }
         }
 

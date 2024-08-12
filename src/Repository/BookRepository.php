@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Book;
 use App\Entity\User;
-use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
@@ -26,18 +25,17 @@ class BookRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('book')
             ->getQuery();
-            
+
         return $this->paginatorInterface->paginate($query, $currentPage, self::RESULTS_PER_PAGE);
     }
 
-    public function getUserPaginator(string $userIdentifier, int $currentPage = 1): PaginationInterface
+    public function getUserPaginator(User $user, int $currentPage = 1): PaginationInterface
     {
         $query = $this->createQueryBuilder('book')
-            ->innerJoin('book.user', 'user')
-            ->andWhere('user.email = :userIdentifier')
-            ->setParameter('userIdentifier', $userIdentifier)
+            ->andWhere('book.owner = :owner')
+            ->setParameter('owner', $user)
             ->getQuery();
-            
+
         return $this->paginatorInterface->paginate($query, $currentPage, self::RESULTS_PER_PAGE);
     }
 
@@ -48,29 +46,25 @@ class BookRepository extends ServiceEntityRepository
             ->orWhere('book.author LIKE :val')
             ->setParameter('val', '%' . $search . '%')
             ->getQuery();
-            return $this->paginatorInterface->paginate($query, $currentPage, self::RESULTS_PER_PAGE);
+        return $this->paginatorInterface->paginate($query, $currentPage, self::RESULTS_PER_PAGE);
     }
 
-    public function getUserSearchPaginator(string $search, string $userIdentifier, int $currentPage = 1): PaginationInterface
+    public function getUserSearchPaginator(string $search, User $user, int $currentPage = 1): PaginationInterface
     {
-        $query = $this->createQueryBuilder('book')
-            ->innerJoin('user', 'user', Join::ON, 'book.added_by_user_id = user.id')
-            ->andWhere('book.title LIKE :val')
-            ->orWhere('book.author LIKE :val')
-            ->andWhere('user.email = :userIdentifier')
-            ->setParameter('val', '%' . $search . '%')
-            ->setParameter('userIdentifier', $userIdentifier)
-            ->getQuery();
-            return $this->paginatorInterface->paginate($query, $currentPage, self::RESULTS_PER_PAGE);
-    }
+        $queryBuilder = $this->createQueryBuilder('book');
 
-    //    public function findOneBySomeField($value): ?Book
-    //    {
-    //        return $this->createQueryBuilder('b')
-    //            ->andWhere('b.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        $queryBuilder->select('book')
+            ->where(
+                $queryBuilder->expr()->orX(
+                    $queryBuilder->expr()->like('book.title', ':search'),
+                    $queryBuilder->expr()->like('book.author', ':search')
+                )
+            )
+            ->andWhere('book.owner = :owner')
+            ->setParameter('search', '%' . $search . '%')
+            ->setParameter('owner', $user)
+            ->getQuery();
+
+        return $this->paginatorInterface->paginate($queryBuilder->getQuery(), $currentPage, self::RESULTS_PER_PAGE);
+    }
 }

@@ -24,15 +24,6 @@ class BookSearchType extends AbstractType
             )
             ->add('submit', SubmitType::class)
         ;
-        // $builder
-        //     ->add('title')
-        //     ->add('author')
-        //     ->add('description')
-        //     ->add('yearOfPublication')
-        //     ->add('isbn')
-        //     ->add('coverFileName')
-        //     ->add('submit', SubmitType::class)
-        // ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

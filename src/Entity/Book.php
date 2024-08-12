@@ -32,8 +32,8 @@ class Book
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $coverFileName = null;
 
-    #[ORM\ManyToOne(inversedBy: 'book')]
-    private ?User $addedByUser = null;
+    #[ORM\ManyToOne(inversedBy: 'ownedBooks')]
+    private ?User $owner = null;
 
     public function getId(): ?int
     {
@@ -119,14 +119,14 @@ class Book
         return $this;
     }
 
-    public function getAddedByUser(): ?User
+    public function getOwner(): ?User
     {
-        return $this->addedByUser;
+        return $this->owner;
     }
 
-    public function setAddedByUser(?User $addedByUser): static
+    public function setOwner(?User $owner): static
     {
-        $this->addedByUser = $addedByUser;
+        $this->owner = $owner;
 
         return $this;
     }

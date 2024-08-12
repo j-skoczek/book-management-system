@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Book;
 use App\Repository\BookRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
