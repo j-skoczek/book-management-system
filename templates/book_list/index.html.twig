@@ -5,16 +5,16 @@
 
 {% block body %}
 
-	{{form(search_form)}}
+	{{form(search_form)}} {# todo display submit inline #}
 
 	{% for book in paginator %}
-		<div>
-			<a href="{{ path('app_book', { isbn: book.isbn }) }}">
-				{% block book %}
+		{% block book %}
+			<div>
+				<a href="{{ path('app_book', { isbn: book.isbn }) }}">
 					{{ book.title }} by {{ book.author }}
-				{% endblock %}
-			</a>
-		</div>
+				</a>
+			</div>
+		{% endblock %}
 	{% endfor %}
 
 	{# display navigation #}

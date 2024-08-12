@@ -1,5 +1,22 @@
 {% extends 'book_list/index.html.twig' %}
 
 {% block book %}
-	{{ book.title }} by {{ book.author }} || EDIT
+{# todo display in line #}
+		<span>
+			<a href="{{ path('app_book', { isbn: book.isbn }) }}">
+				{{ book.title }} by {{ book.author }}
+			</a>
+		</span>
+		<span>
+			<a href="{{ path('app_book_edit', { id: book.id }) }}">
+				<button type="submit">Edit</button>
+			</a>
+		</span>
+		<span>
+			<form method="post" action="{{ path('app_book_delete', {'bookId': book.id}) }}">
+				<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ book.id) }}">
+				<button type="submit">Delete</button>
+			</form>
+		</span>
+	</div>
 {% endblock %}

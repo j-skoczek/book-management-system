@@ -15,4 +15,6 @@ class BookController extends AbstractController
         $book = $bookRepository->findOneBy(['isbn' => $isbn]);
         return $this->render('book/index.html.twig', ['book' => $book]);
     }
+
+    //TODO PUT ALL CRUD FUNCTIONS HERE
 }
