@@ -8,5 +8,10 @@
 	<div>{{book.title}}</div>
 	<div>{{book.author}}</div>
 	<div>{{book.isbn}}</div>
+	{% if book.coverFileName %}
+		<div>
+			<img src="{{ asset('uploads/photos/' ~ book.coverFileName) }}" style="max-width: 200px"/>
+		</div>
+	{% endif %}
 
 {% endblock %}

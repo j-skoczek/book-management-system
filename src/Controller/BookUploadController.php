@@ -10,6 +10,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class BookUploadController extends AbstractController
@@ -21,7 +22,7 @@ class BookUploadController extends AbstractController
 
 
     #[Route('/book/upload', name: 'app_book_upload')]
-    public function index(Request $request, UserRepository $userRepository): Response
+    public function index(Request $request, UserRepository $userRepository, #[Autowire('%photo_dir%')] string $photoDir): Response
     {
         $book = new Book();
         $form = $this->createForm(BookType::class, $book);
@@ -29,6 +30,11 @@ class BookUploadController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $this->security->getUser();
             $book->setOwner($userRepository->findByEmail($user->getUserIdentifier()));
+            if ($cover = $form['coverFileName']->getData()) {
+                $filename = bin2hex(random_bytes(6)) . '.' . $cover->guessExtension();
+                $cover->move($photoDir, $filename);
+                $book->setCoverFileName($filename);
+            }
             $this->entityManager->persist($book);
             $this->entityManager->flush();
             return $this->redirectToRoute('app_home_page');

@@ -8,12 +8,13 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class BookEditController extends AbstractController
 {
     #[Route('/book/edit/{id}', name: 'app_book_edit', methods: ["GET", "POST"])]
-    public function edit(EntityManagerInterface $entityManager, Request $request, int $id): Response
+    public function edit(EntityManagerInterface $entityManager, Request $request, int $id, #[Autowire('%photo_dir%')] string $photoDir): Response
     {
         $book = $entityManager->getRepository(Book::class)->find($id);
 
@@ -27,6 +28,11 @@ class BookEditController extends AbstractController
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
+            if ($cover = $editForm['coverFileName']->getData()) {
+                $filename = bin2hex(random_bytes(6)) . '.' . $cover->guessExtension();
+                $cover->move($photoDir, $filename);
+                $book->setCoverFileName($filename);
+            }
             $entityManager->flush();
 
             return $this->redirectToRoute('app_book', ['isbn' => $book->getIsbn()]);
