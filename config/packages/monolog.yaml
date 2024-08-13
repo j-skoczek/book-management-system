@@ -1,6 +1,12 @@
 monolog:
     channels:
         - deprecation # Deprecations are logged in the dedicated "deprecation" channel when it exists
+        - book
+    handlers:
+        main:
+            type: stream
+            path: "%kernel.logs_dir%/%kernel.environment%.log"
+            level: debug
 
 when@dev:
     monolog:
@@ -22,6 +28,11 @@ when@dev:
                 type: console
                 process_psr_3_messages: false
                 channels: ["!event", "!doctrine", "!console"]
+            book:
+                level: info
+                path: "%kernel.logs_dir%/%kernel.environment%.book.log"
+                type: stream
+                channels: ["book"]
 
 when@test:
     monolog:
@@ -36,6 +47,11 @@ when@test:
                 type: stream
                 path: "%kernel.logs_dir%/%kernel.environment%.log"
                 level: debug
+            book:
+                level: info
+                path: "%kernel.logs_dir%/%kernel.environment%.book.log"
+                type: stream
+                channels: ["book"]
 
 when@prod:
     monolog:
@@ -60,3 +76,8 @@ when@prod:
                 channels: [deprecation]
                 path: php://stderr
                 formatter: monolog.formatter.json
+            book:
+                level: info
+                path: "%kernel.logs_dir%/%kernel.environment%.book.log"
+                type: stream
+                channels: ["book"]

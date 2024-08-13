@@ -18,6 +18,8 @@ class BookController extends AbstractController
 
     //TODO PUT ALL CRUD FUNCTIONS HERE
 
+    //todo php stan and lint
+
     //TODO COVER IMAGE UPLOAD
     //TODO EVENT LISTENER TO LOG UPLOADS TO A LOG FILE
     //TODO FIXTURE WITH 1MIL RECORDS
