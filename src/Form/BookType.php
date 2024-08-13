@@ -28,11 +28,6 @@ class BookType extends AbstractType
                 ]
             )
             ->add('yearOfPublication', IntegerType::class, ['label' => 'year of publication'])
-
-
-            //todo handle isbn 10 and 13 char
-
-
             ->add('isbn', TextType::class)
             ->add(
                 'coverFileName',

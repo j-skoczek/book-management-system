@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Book;
 use App\Form\BookType;
 use Doctrine\ORM\EntityManagerInterface;
+use Twig\Sandbox\SecurityPolicyInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -14,15 +15,22 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class BookEditController extends AbstractController
 {
     #[Route('/book/edit/{id}', name: 'app_book_edit', methods: ["GET", "POST"])]
-    public function edit(EntityManagerInterface $entityManager, Request $request, int $id, #[Autowire('%photo_dir%')] string $photoDir): Response
-    {
+    public function edit(
+        EntityManagerInterface $entityManager,
+        Request $request,
+        int $id,
+        #[Autowire('%photo_dir%')] string $photoDir,
+        SecurityPolicyInterface $security
+    ): Response {
         $book = $entityManager->getRepository(Book::class)->find($id);
 
         if (!$book) {
             throw $this->createNotFoundException('No book found');
         }
 
-        //todo check if book belongs to the user
+        if ($book->getOwner !== $this->getUser()) {
+            throw $this->createNotFoundException('No access');
+        }
 
         $editForm = $this->createForm(BookType::class, $book);
         $editForm->handleRequest($request);

@@ -22,7 +22,7 @@ class BookSearchType extends AbstractType
                     'mapped' => false
                 ]
             )
-            ->add('submit', SubmitType::class)
+            ->add('submit', SubmitType::class, ['attr' => ['class' => 'save']])
         ;
     }
 

@@ -26,14 +26,14 @@ final class BookEntityListener
     public function prePersist(Book $book, LifecycleEventArgs $event)
     {
         $msg = str_replace(':isbn', $book->getIsbn(), self::SAVE_MSG);
-        $msg = str_replace(':user', $this->security->getUser()->getUserIdentifier(), $msg);
+        $msg = str_replace(':user', $book->getOwner()->getEmail(), $msg);
         $this->bookLogger->info($msg);
     }
 
     public function preUpdate(Book $book, LifecycleEventArgs $event)
     {
         $msg = str_replace(':isbn', $book->getIsbn(), self::UPDATE_MSG);
-        $msg = str_replace(':user', $this->security->getUser()->getUserIdentifier(), $msg);
+        $msg = str_replace(':user', $book->getOwner()->getEmail(), $msg);
         $this->bookLogger->info($msg);
     }
 }

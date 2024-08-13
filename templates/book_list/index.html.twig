@@ -5,7 +5,7 @@
 
 {% block body %}
 
-	{{form(search_form)}} {# todo display submit inline #}
+	{{form(search_form)}}
 
 	{% for book in paginator %}
 		{% block book %}
@@ -17,7 +17,6 @@
 		{% endblock %}
 	{% endfor %}
 
-	{# display navigation #}
 	<div class="navigation">
 		{{ knp_pagination_render(paginator) }}
 	</div>

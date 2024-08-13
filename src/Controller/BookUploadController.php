@@ -30,6 +30,8 @@ class BookUploadController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $this->security->getUser();
             $book->setOwner($userRepository->findByEmail($user->getUserIdentifier()));
+            //todo isbn maybe just treat it as a string and ignore hyphens ? more letters in the field
+            // $book->setIsbn(str_replace('-', ));
             if ($cover = $form['coverFileName']->getData()) {
                 $filename = bin2hex(random_bytes(6)) . '.' . $cover->guessExtension();
                 $cover->move($photoDir, $filename);
