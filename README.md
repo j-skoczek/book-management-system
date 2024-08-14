@@ -31,7 +31,8 @@ Other fields would be handled in similar fashion (ie. isbn+userId should be a un
 
 ## Book controller
 
-I'm keeping all the logic there as it's just small enough to keep it there. If I were to add anything more I'd move the logic to a service.
+I'm keeping all the logic there as it's just small enough to keep it there.
+If I were to add anything more I'd move the logic to a service.
 
 ## Tests
 I'm really light on logic here and I mostly use existing packages. Add time constrains on top of this.
