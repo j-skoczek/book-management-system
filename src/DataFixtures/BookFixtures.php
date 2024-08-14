@@ -2,21 +2,29 @@
 
 namespace App\DataFixtures;
 
+use Generator;
 use App\Entity\Book;
 use App\Entity\User;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use App\EventListener\BookEntityListener;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use phpDocumentor\Reflection\DocBlock\Tags\Generic;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 class BookFixtures extends Fixture implements DependentFixtureInterface
 {
-    const BOOK_COUNT = 10; //change to get x10 records in the db
+    const BOOK_COUNT = 100000; //change to get x10 records in the db
+    const BATCH_SIZE = 10000; //change to get x10 records in the db
 
     private $bookCounter = 0;
-    
-    public function __construct(private EntityManagerInterface $entityManager) {}
+    private $consoleOutput;
+
+    public function __construct(private EntityManagerInterface $entityManager)
+    {
+        $this->consoleOutput = new ConsoleOutput();
+    }
 
     public function load(ObjectManager $manager): void
     {
@@ -27,9 +35,21 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
             $this->addBooks($user, $manager);
         }
         $manager->flush();
+        $manager->clear();
     }
 
     private function addBooks(User $user, ObjectManager $manager)
+    {
+        foreach ($this->generateBooks($user) as $book) {
+            $manager->persist($book);
+            if ($this->bookCounter % self::BATCH_SIZE === 0) {
+                $this->consoleOutput->writeln('<info>saved ' . $this->bookCounter . ' books</info>');
+                $manager->flush();
+            }
+        }
+    }
+
+    private function generateBooks(User $user): Generator
     {
         for ($i = 0; $i < self::BOOK_COUNT; $i++) {
             $book = new Book();
@@ -40,8 +60,7 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
             $book->setIsbn(str_pad($this->bookCounter++, 13, '0', STR_PAD_LEFT));
             $book->setOwner($user);
 
-            $manager->persist($book);
-            
+            yield $book;
         }
     }
 

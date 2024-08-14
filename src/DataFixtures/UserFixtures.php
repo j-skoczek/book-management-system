@@ -30,5 +30,6 @@ class UserFixtures extends Fixture
         }
         
         $manager->flush();
+        $manager->clear();
     }
 }

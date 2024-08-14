@@ -25,6 +25,12 @@ doctrine:
         controller_resolver:
             auto_mapping: false
 
+when@dev:
+    doctrine:
+        dbal:
+            logging: false
+
+
 when@test:
     doctrine:
         dbal:

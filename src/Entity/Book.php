@@ -32,7 +32,7 @@ class Book
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $coverFileName = null;
 
-    #[ORM\ManyToOne(inversedBy: 'ownedBooks')]
+    #[ORM\ManyToOne(inversedBy: 'ownedBooks', cascade: ["persist"])]
     private ?User $owner = null;
 
     public function getId(): ?int
