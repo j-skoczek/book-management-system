@@ -2,15 +2,15 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class LoginController extends AbstractController
 {
-    #[Route(path: '/login', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    #[Route(path: '/login/{msg}', name: 'app_login')]
+    public function login(AuthenticationUtils $authenticationUtils, string $msg = ''): Response
     {
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -21,6 +21,7 @@ class LoginController extends AbstractController
         return $this->render('login/login.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,
+            'msg' => $msg
         ]);
     }
 

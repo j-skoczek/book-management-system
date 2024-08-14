@@ -15,7 +15,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 class BookFixtures extends Fixture implements DependentFixtureInterface
 {
-    const BOOK_COUNT = 100000; //change to get x10 records in the db
+    const BOOK_COUNT = 10000; //change to get x10 records in the db
     const BATCH_SIZE = 10000; //change to get x10 records in the db
 
     private $bookCounter = 0;

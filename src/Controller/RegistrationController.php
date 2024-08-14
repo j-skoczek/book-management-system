@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserRegistrationType;
+use App\Repository\UserRepository;
+use Symfony\Component\Form\FormError;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,30 +19,32 @@ class RegistrationController extends AbstractController
         private EntityManagerInterface $entityManager
     ) {}
 
-    #[Route('/registration', name: 'app_registration')]
-    public function index(UserPasswordHasherInterface $userPasswordHasher, Request $request): Response
+    #[Route('/registration', name: 'app_registration', methods: ["GET", "POST"])]
+    public function index(UserPasswordHasherInterface $userPasswordHasher, Request $request, UserRepository $userRepository): Response
     {
         $user = new User();
         $registrationForm = $this->createForm(UserRegistrationType::class, $user);
         $registrationForm->handleRequest($request);
         if ($registrationForm->isSubmitted() && $registrationForm->isValid()) {
+            if($userRepository->findByEmail($registrationForm['email']->getData())) {
+                $registrationForm->get('email')->addError(new FormError('This email is already in use.'));
+
+                return $this->render('registration/index.html.twig', [
+                    'registration_form' => $registrationForm,
+                ]);
+            }
             $plaintextPassword = $registrationForm['password']->getData();
             $hashedPassword = $userPasswordHasher->hashPassword(
                 $user,
                 $plaintextPassword
             );
             $user->setPassword($hashedPassword);
-
-            //is there a reason to have more roles ? for now let's assume admin has direct db access and can handle things there
             $user->setRoles(['roles'=> 'ROLE_USER']);
-
-            // todo handle duplicate emails
 
             $this->entityManager->persist($user);
             $this->entityManager->flush();
 
-            //todo pass some msg like registration successfull?
-            return $this->redirectToRoute('app_home_page');
+            return $this->redirectToRoute('app_login', ['msg' => 'registration_successful']);
         }
 
 
