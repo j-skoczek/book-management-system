@@ -18,7 +18,7 @@ class UserFixtures extends Fixture
         for ($i = 0; $i < self::USER_COUNT; $i++) {
             $user = new User();
             $user->setEmail('test+' . $i . '@test.test');
-            $user->setRoles(['roles' => 'ROLE_USER']);
+            $user->setRoles(['ROLE_USER']);
             $hashedPassword = $this->userPasswordHasher->hashPassword(
                 $user,
                 'asd123'

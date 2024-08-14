@@ -19,18 +19,17 @@ final class BookEntityListener
     const SAVE_MSG = 'Book with ISBN :isbn has been added by user :user';
     
     public function __construct(
-        private LoggerInterface $bookLogger,
-        private Security $security
+        private LoggerInterface $bookLogger
     ) {}
 
-    public function prePersist(Book $book, LifecycleEventArgs $event)
+    public function prePersist(Book $book): void
     {
         $msg = str_replace(':isbn', $book->getIsbn(), self::SAVE_MSG);
         $msg = str_replace(':user', $book->getOwner()->getEmail(), $msg);
         $this->bookLogger->info($msg);
     }
 
-    public function preUpdate(Book $book, LifecycleEventArgs $event)
+    public function preUpdate(Book $book): void
     {
         $msg = str_replace(':isbn', $book->getIsbn(), self::UPDATE_MSG);
         $msg = str_replace(':user', $book->getOwner()->getEmail(), $msg);

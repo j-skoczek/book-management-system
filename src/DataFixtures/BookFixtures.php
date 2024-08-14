@@ -18,8 +18,8 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
     const BOOK_COUNT = 10000; //change to get x10 records in the db
     const BATCH_SIZE = 10000; //change to get x10 records in the db
 
-    private $bookCounter = 0;
-    private $consoleOutput;
+    private int $bookCounter = 0;
+    private ConsoleOutput $consoleOutput;
 
     public function __construct(private EntityManagerInterface $entityManager)
     {
@@ -38,7 +38,7 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
         $manager->clear();
     }
 
-    private function addBooks(User $user, ObjectManager $manager)
+    private function addBooks(User $user, ObjectManager $manager): void
     {
         foreach ($this->generateBooks($user) as $book) {
             $manager->persist($book);
@@ -57,7 +57,7 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
             $book->setAuthor('author ' . $i);
             $book->setDescription('test description ' . $i);
             $book->setYearOfPublication($i);
-            $book->setIsbn(str_pad($this->bookCounter++, 13, '0', STR_PAD_LEFT));
+            $book->setIsbn(str_pad((string)$this->bookCounter++, 13, '0', STR_PAD_LEFT));
             $book->setOwner($user);
 
             yield $book;

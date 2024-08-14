@@ -57,7 +57,7 @@ class BookController extends AbstractController
             throw $this->createNotFoundException('No book found');
         }
 
-        if ($book->getOwner !== $this->getUser()) {
+        if ($book->getOwner() !== $this->getUser()) {
             throw $this->createNotFoundException('No access');
         }
 
