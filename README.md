@@ -28,3 +28,7 @@ or simply create a sql dump. I've run out of time while working on this part and
 As with fixtures: I've allocated 6 hours to the project and I've run out of time to handle exceptions.
 Right now the only place with ok form handling is email address in registration form. It can;t be duplicated.
 Other fields would be handled in similar fashion (ie. isbn+userId should be a unique key to avoid adding the same book by the same user)
+
+## Book controller
+
+I'm keeping all the logic there as it's just small enough to keep it there. If I were to add anything more I'd move the logic to a service.
